@@ -9,5 +9,5 @@ IMPORT_FILE_LOCATION = ""
 
 
 TODO:
-Add a check to kick users when to many are logged in
+Kick users in order of longest idle time
 Add CTGY import

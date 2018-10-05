@@ -1,9 +1,11 @@
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import NoSuchElementException
 
 def frame_switch(name):
   driver.switch_to.frame(driver.find_element_by_name(name))
+  print("switched to frame: " + name)
 
 def waitForAlert():
     WebDriverWait(driver, 25).until(EC.alert_is_present())
@@ -27,6 +29,15 @@ user = driver.find_element_by_name("UserName").send_keys(USERNAME)
 pw = driver.find_element_by_name("Password").send_keys(PASSWORD)
 signInBtn = driver.find_element_by_id('mm9_login_button').click()
 
+# Kicks first user in list until Miva is accesible
+while not driver.find_elements_by_id("mm9_screen_header_search_box_search"):
+    try:
+        kickUser = driver.find_element_by_partial_link_text('Close Session').click()
+        closeAlert = driver.find_element_by_partial_link_text('Yes').click()
+    except NoSuchElementException:
+        print("No need to kick anyone")
+
+driver.implicitly_wait(10)
 search = driver.find_element_by_id("mm9_screen_header_search_box_search").send_keys('optimizer')
 driver.implicitly_wait(10)
 option = driver.find_element_by_xpath('//*[@id="mm9_screen_header_search_box"]/div/div[2]/span[1]/div/div[1]/span/span').click()
@@ -37,6 +48,7 @@ driver.switch_to.default_content()
 importTab = driver.find_element_by_xpath('//*[@id="mm9_screen_actionbar_tablist_content"]/span[5]').click()
 
 frame_switch("Main")
+
 prodsRadio = driver.find_element_by_xpath('//*[@id="mm9_content"]/div[3]/table/tbody/tr[1]/td/fieldset/table/tbody/tr[1]/td[1]/input')
 prodsRadio.click()
 textArea = driver.find_element_by_xpath('//*[@id="mm9_content"]/div[3]/table/tbody/tr[1]/td/fieldset/table/tbody/tr[1]/td[2]/textarea')
