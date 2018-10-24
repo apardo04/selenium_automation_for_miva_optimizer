@@ -13,5 +13,8 @@ IMPORT_FILE_LOCATION = ""
 
 
 TODO:
-Kick users in order of longest idle time
+
 Add CTGY import
+
+Kick users in order of longest idle time
+

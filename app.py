@@ -8,8 +8,11 @@ def frame_switch(name):
   print("switched to frame: " + name)
 
 def waitForAlert():
-    WebDriverWait(driver, 25).until(EC.alert_is_present())
-    driver.switch_to.alert.accept()
+    try:
+        WebDriverWait(driver, 10).until(EC.alert_is_present())
+        driver.switch_to.alert.accept()
+    except TimeoutException as ex:
+        print("Alert wasn't present this time.. continuing..")
 
 # Fill in Miva store domain, Username/Password for login and import file location
 STORE_DOMAIN = ""
