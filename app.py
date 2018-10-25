@@ -2,6 +2,8 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import StaleElementReferenceException
 
 def frame_switch(name):
   driver.switch_to.frame(driver.find_element_by_name(name))
@@ -52,11 +54,15 @@ importTab = driver.find_element_by_xpath('//*[@id="mm9_screen_actionbar_tablist_
 
 frame_switch("Main")
 
-prodsRadio = driver.find_element_by_xpath('//*[@id="mm9_content"]/div[3]/table/tbody/tr[1]/td/fieldset/table/tbody/tr[1]/td[1]/input')
-prodsRadio.click()
-textArea = driver.find_element_by_xpath('//*[@id="mm9_content"]/div[3]/table/tbody/tr[1]/td/fieldset/table/tbody/tr[1]/td[2]/textarea')
-textArea.click()
-textArea.send_keys(data)
+prodsRadio = driver.find_element_by_xpath('//*[@id="mm9_content"]/div[3]/table/tbody/tr[1]/td/fieldset/table/tbody/tr[1]/td[1]/input').click()
+while(True):
+    try:
+        textArea = driver.find_element_by_xpath('//*[@id="mm9_content"]/div[3]/table/tbody/tr[1]/td/fieldset/table/tbody/tr[1]/td[2]/textarea')
+        textArea.click()
+        textArea.send_keys(data)
+        break
+    except StaleElementReferenceException as Exception:
+        print (Exception)
 importBtn = driver.find_element_by_xpath('//*[@id="mm9_content"]/div[3]/table/tbody/tr[2]/td/input').click()
 
 driver.switch_to.default_content()
