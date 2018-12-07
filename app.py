@@ -4,6 +4,14 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import StaleElementReferenceException
+import os
+
+# Fill in Miva store domain, Username/Password for login and import file location
+STORE_DOMAIN = ""
+USERNAME = ""
+PASSWORD =""
+IMPORT_FILE_LOCATION = ""
+#IMPORT_FILE_LOCATION = "/Optimizer_Files/prod-test-import.txt"
 
 def frame_switch(name):
   driver.switch_to.frame(driver.find_element_by_name(name))
@@ -11,23 +19,20 @@ def frame_switch(name):
 
 def waitForAlert():
     try:
-        WebDriverWait(driver, 10).until(EC.alert_is_present())
+        WebDriverWait(driver, 4).until(EC.alert_is_present())
         driver.switch_to.alert.accept()
     except TimeoutException as ex:
         print("Alert wasn't present this time.. continuing..")
 
-# Fill in Miva store domain, Username/Password for login and import file location
-STORE_DOMAIN = ""
-USERNAME = ""
-PASSWORD = ""
-IMPORT_FILE_LOCATION = ""
-
-driver = webdriver.Chrome(executable_path='chromedriver.exe')
+PATH = os.path.dirname(os.path.abspath(__file__))
+driver = webdriver.Chrome(executable_path= PATH + '/chromedriver.exe')
 driver.get(STORE_DOMAIN + "/Merchant5/admin.mvc")
-assert "Miva Merchant" in driver.title
+
+# Not required but ensures you're on the correct web page
+#assert "Miva Merchant" in driver.title
 
 data = []
-with open(IMPORT_FILE_LOCATION, "r") as myfile:
+with open(PATH + IMPORT_FILE_LOCATION, "r") as myfile:
     data += myfile.readlines()
 
 user = driver.find_element_by_name("UserName").send_keys(USERNAME)
