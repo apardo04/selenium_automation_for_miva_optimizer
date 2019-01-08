@@ -59,9 +59,11 @@ importTab = driver.find_element_by_xpath('//*[@id="mm9_screen_actionbar_tablist_
 
 frame_switch("Main")
 
-prodsRadio = driver.find_element_by_xpath('//*[@id="mm9_content"]/div[3]/table/tbody/tr[1]/td/fieldset/table/tbody/tr[1]/td[1]/input').click()
+driver.implicitly_wait(10)
+
 while(True):
     try:
+        prodsRadio = driver.find_element_by_xpath('//*[@id="mm9_content"]/div[3]/table/tbody/tr[1]/td/fieldset/table/tbody/tr[1]/td[1]/input').click()
         textArea = driver.find_element_by_xpath('//*[@id="mm9_content"]/div[3]/table/tbody/tr[1]/td/fieldset/table/tbody/tr[1]/td[2]/textarea')
         textArea.click()
         textArea.send_keys(data)
