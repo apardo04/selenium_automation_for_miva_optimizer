@@ -1,10 +1,12 @@
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import StaleElementReferenceException
 import os
+import pyperclip
 
 # Fill in Miva store domain, Username/Password for login and import file location
 STORE_DOMAIN = ""
@@ -31,9 +33,11 @@ driver.get(STORE_DOMAIN + "/Merchant5/admin.mvc")
 # Not required but ensures you're on the correct web page
 #assert "Miva Merchant" in driver.title
 
-data = []
+dataStr = ""
 with open(PATH + IMPORT_FILE_LOCATION, "r") as myfile:
-    data += myfile.readlines()
+    dataStr += str(myfile.read().splitlines())
+dataStr = dataStr.replace("'", "").replace("[","").replace("]","")
+pyperclip.copy(dataStr)
 
 user = driver.find_element_by_name("UserName").send_keys(USERNAME)
 pw = driver.find_element_by_name("Password").send_keys(PASSWORD)
@@ -66,7 +70,7 @@ while(True):
         prodsRadio = driver.find_element_by_xpath('//*[@id="mm9_content"]/div[3]/table/tbody/tr[1]/td/fieldset/table/tbody/tr[1]/td[1]/input').click()
         textArea = driver.find_element_by_xpath('//*[@id="mm9_content"]/div[3]/table/tbody/tr[1]/td/fieldset/table/tbody/tr[1]/td[2]/textarea')
         textArea.click()
-        textArea.send_keys(data)
+        textArea.send_keys(Keys.CONTROL, 'v')
         break
     except StaleElementReferenceException as Exception:
         print (Exception)
