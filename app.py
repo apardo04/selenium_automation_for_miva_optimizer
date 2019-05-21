@@ -35,7 +35,7 @@ driver.get(STORE_DOMAIN + "/Merchant5/admin.mvc")
 
 dataStr = ""
 with open(PATH + IMPORT_FILE_LOCATION, "r") as myfile:
-    dataStr += str(myfile.read().splitlines())
+    dataStr += str(myfile.read())
 dataStr = dataStr.replace("'", "").replace("[","").replace("]","")
 pyperclip.copy(dataStr)
 
